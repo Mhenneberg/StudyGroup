@@ -1,0 +1,35 @@
+name: Main workflow
+
+on:
+  pull_request:
+    paths-ignore:
+      - '**.md'
+  push:
+    branches:
+      - develop
+    paths-ignore:
+      - '**.md'
+
+jobs:
+  build:
+    runs-on: ${{ matrix.operating-system }}
+    strategy:
+      fail-fast: false
+      matrix:
+        operating-system: [ubuntu-latest, windows-latest, macOS-latest]
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v2
+    - name: Set Node.js 16
+      uses: actions/setup-node@v1
+      with:
+        node-version: 16.x
+        cache: npm
+    - run: npm ci
+    - run: npm run build
+    - run: npm run format-check
+    - run: npm test
+    - name: Verify no unstaged changes
+      if: runner.os != 'windows'
+      run: __tests__/verify-no-unstaged-changes.sh
+  
