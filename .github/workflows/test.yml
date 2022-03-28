@@ -21,3 +21,10 @@ jobs:
       with:
         dotnet-version: '6.0.x' # SDK Version to use; x will use the latest version of the 3.1 channel
     - run: dotnet build ./CICD/application/Apps.sln
+    - run: dotnet run ./CICD/application/Apps.sln
+    # - name: Check installed version
+    #   shell: pwsh
+    #   run: |
+    #     $version = & dotnet --version
+    #     Write-Host "Installed version: $version"
+    #     if (-not $version.StartsWith("${{ matrix.dotnet-version }}")) { throw "Unexpected version" }
